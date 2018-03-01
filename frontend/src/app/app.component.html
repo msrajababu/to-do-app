@@ -1,0 +1,28 @@
+<div style="text-align:center">
+    <h1 style="color: rgba(58,152,67, 0.40)">
+        Welcome to {{ title }}
+    </h1>
+</div>
+
+<div class="form-container">
+    <form [formGroup]="todoForm" (ngSubmit)="validatePost(todoForm.value)">
+        <div class="row columns">
+            <input type="text" formControlName="name">
+            <div class="alert" *ngIf="!todoForm.controls['name'].valid && todoForm.controls['name'].touched">
+                {{ nameAlert }}
+            </div>
+            <input type="submit" value="Add Todo" [disabled]="!todoForm.valid">
+        </div>
+    </form>
+    <ol>
+        <li *ngFor="let todo of todos" >
+            <input type="checkbox" class="checkbox" [(ngModel)]="todo.isDone"/>
+            <span [class.striking-text]="todo.isDone"> {{ todo.name }} </span>
+            <button class="class=btn btn-primary active" (click)="updateTodo(todo)"> Complete/Uncomplete</button>
+            <button class="class=btn btn-primary active" (click)="removeTodo(todo)"> Remove</button>
+
+        </li>
+    </ol>
+
+</div>
+

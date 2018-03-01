@@ -9,12 +9,12 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * X.
+ * ToDoService implementation
  *
- * @author rsrinivasalu 2/28/2018 9:28 AM
+ * @author rajababu 2/28/2018 9:28 AM
  */
 @Service("toDoService")
-public class ToDoServiceImpl {
+public class ToDoServiceImpl implements ToDoService {
     private final ToDoRepository toDoRepository;
 
     @Autowired
@@ -22,15 +22,27 @@ public class ToDoServiceImpl {
         this.toDoRepository = toDoRepository;
     }
 
+    @Override
+    public void addToDo(final ToDo toDo) {
+        toDoRepository.saveAndFlush(toDo);
+    }
+
+    @Override
     public List<ToDo> listAllToDos() {
 
         return toDoRepository.findAll();
     }
 
-    public void addToDo(final ToDo toDo) {
-        toDoRepository.save(toDo);
+    @Override
+    public void putToDo(final ToDo toDo) {
+        final ToDo updateToDo = toDoRepository.findOne(toDo.getId());
+        if (updateToDo != null) {
+            updateToDo.setDone(toDo.isDone());
+            toDoRepository.save(updateToDo);
+        }
     }
 
+    @Override
     public void removeToDo(final Integer index) {
         Optional
             .ofNullable(index)
